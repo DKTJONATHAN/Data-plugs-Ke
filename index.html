@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Plugs KE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'custom-orange': '#FF7F00',
+                        'custom-dark': '#1A1A1A',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to bottom, #1A1A1A, #2C2C2C);
+            color: white;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+        
+        .globe-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 0 auto;
+        }
+        
+        .globe {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #FF7F00, #1A1A1A);
+            box-shadow: 0 0 40px rgba(255, 127, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .latitude {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.3);
+            left: 0;
+            border-radius: 50%;
+        }
+        
+        .longitude {
+            position: absolute;
+            width: 1px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            top: 0;
+            left: 50%;
+            border-radius: 50%;
+        }
+        
+        .pullup-menu {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            background: rgba(26, 26, 26, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+        
+        .special-offer {
+            background: linear-gradient(to right, #FF7F00, #FF5500);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .bundle-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .bundle-card:hover, .bundle-card.selected {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 127, 0, 0.2);
+            border: 1px solid #FF7F00;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #1A1A1A;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        
+        .menu-item {
+            text-align: center;
+            padding: 12px 0;
+            flex: 1;
+        }
+        
+        .menu-item.active {
+            color: #FF7F00;
+            border-top: 3px solid #FF7F00;
+        }
+        
+        .hamburger-menu {
+            display: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #FF7F00;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .hamburger-menu span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 2px 0;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1002;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: #1A1A1A;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(255, 127, 0, 0.3);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: #FF7F00;
+            border-radius: 10px;
+            position: relative;
+            margin-right: 10px;
+            transform: rotate(45deg);
+        }
+        
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 3px solid white;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .purchase-modal {
+            text-align: center;
+        }
+        
+        .till-number {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            background: rgba(255, 127, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .copy-btn {
+            background: #FF7F00;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            background: #FF5500;
+            transform: scale(1.05);
+        }
+        
+        @media (max-width: 768px) {
+            .hamburger-menu {
+                display: flex;
+            }
+            
+            .desktop-menu {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="text-white">
+    <!-- Header -->
+    <header class="bg-custom-dark py-4 px-6 flex justify-between items-center relative">
+        <div class="logo">
+            <div class="logo-icon"></div>
+            <h1 class="text-2xl font-bold text-custom-orange">Data Plugs KE</h1>
+        </div>
+        
+        <div class="desktop-menu flex space-x-6">
+            <a href="#" class="hover:text-custom-orange transition">Home</a>
+            <a href="#" class="hover:text-custom-orange transition">Data</a>
+            <a href="#" class="hover:text-custom-orange transition">SMS</a>
+            <a href="#" class="hover:text-custom-orange transition">Airtime</a>
+            <a href="#" class="hover:text-custom-orange transition">Offers</a>
+        </div>
+        
+        <div class="hamburger-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <div class="mobile-menu absolute top-0 right-0 w-0 overflow-hidden bg-custom-dark h-screen transition-all duration-300 z-50">
+            <div class="p-6 mt-16">
+                <a href="#" class="block py-3 text-lg border-b border-gray-700">Home</a>
+                <a href="#" class="block py-3 text-lg border-b border-gray-700">Data Bundles</a>
+                <a href="#" class="block py-3 text-lg border-b border-gray-700">SMS Plans</a>
+                <a href="#" class="block py-3 text-lg border-b border-gray-700">Airtime</a>
+                <a href="#" class="block py-3 text-lg border-b border-gray-700">Special Offers</a>
+                <a href="#" class="block py-3 text-lg border-b border-gray-700">Jenga Bundle</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Special Offer Banner -->
+        <div class="special-offer text-center">
+            <h2 class="text-xl font-bold mb-2">PATA DABO!</h2>
+            <p class="text-sm">First-time customers get DOUBLE the amount on any purchase!</p>
+        </div>
+
+        <!-- Globe with Pull-up Menu -->
+        <div class="globe-container mt-10 mb-8">
+            <div class="globe">
+                <!-- Latitudes -->
+                <div class="latitude" style="top: 20%"></div>
+                <div class="latitude" style="top: 40%"></div>
+                <div class="latitude" style="top: 60%"></div>
+                <div class="latitude" style="top: 80%"></div>
+                
+                <!-- Longitudes -->
+                <div class="longitude" style="transform: rotate(0deg)"></div>
+                <div class="longitude" style="transform: rotate(45deg)"></div>
+                <div class="longitude" style="transform: rotate(90deg)"></div>
+                <div class="longitude" style="transform: rotate(135deg)"></div>
+            </div>
+            
+            <div class="pullup-menu">
+                <h3 class="text-center text-custom-orange font-bold mb-4">What would you like to buy?</h3>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="text-center p-3 bg-custom-dark rounded-lg cursor-pointer hover:bg-custom-orange transition">
+                        <i class="fas fa-wifi text-2xl mb-2"></i>
+                        <p>Data</p>
+                    </div>
+                    <div class="text-center p-3 bg-custom-dark rounded-lg cursor-pointer hover:bg-custom-orange transition">
+                        <i class="fas fa-sms text-2xl mb-2"></i>
+                        <p>SMS</p>
+                    </div>
+                    <div class="text-center p-3 bg-custom-dark rounded-lg cursor-pointer hover:bg-custom-orange transition">
+                        <i class="fas fa-phone-alt text-2xl mb-2"></i>
+                        <p>Airtime</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-12">
+            <button id="show-bundles" class="bg-custom-orange text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-orange-600 transition">
+                Show Available Bundles
+            </button>
+        </div>
+
+        <!-- Data Bundles -->
+        <div id="bundles-container" class="mt-12 hidden">
+            <h2 class="text-2xl font-bold text-center mb-6">Data Bundles</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bundle-card" data-amount="20" data-description="1 GB valid 24hrs">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">1 GB</h3>
+                            <p class="text-sm text-gray-300">Valid 24 hours</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 20</div>
+                    </div>
+                </div>
+                
+                <div class="bundle-card" data-amount="50" data-description="2.5 GB valid 3 days">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">2.5 GB</h3>
+                            <p class="text-sm text-gray-300">Valid 3 days</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 50</div>
+                    </div>
+                </div>
+                
+                <div class="bundle-card" data-amount="75" data-description="2 GB valid 3 days">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">2 GB</h3>
+                            <p class="text-sm text-gray-300">Valid 3 days</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 75</div>
+                    </div>
+                </div>
+                
+                <div class="bundle-card" data-amount="150" data-description="5 GB valid 7 days">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">5 GB</h3>
+                            <p class="text-sm text-gray-300">Valid 7 days</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 150</div>
+                    </div>
+                </div>
+                
+                <div class="bundle-card" data-amount="250" data-description="7 GB valid 30 days">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">7 GB</h3>
+                            <p class="text-sm text-gray-300">Valid 30 days</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 250</div>
+                    </div>
+                </div>
+                
+                <div class="bundle-card" data-amount="500" data-description="10 GB valid 30 days">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">10 GB</h3>
+                            <p class="text-sm text-gray-300">Valid 30 days</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 500</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Jenga Bundle Button -->
+            <div class="text-center mt-10">
+                <button id="jenga-bundle" class="bg-white text-custom-dark px-8 py-3 rounded-full font-bold shadow-lg hover:bg-gray-200 transition">
+                    Jenga Bundle Yako
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Jenga Bundle Modal -->
+    <div id="jenga-modal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-custom-orange">Jenga Bundle Yako</h2>
+                <button class="close-modal text-white text-2xl">&times;</button>
+            </div>
+            
+            <p class="text-sm text-gray-300 mb-4">Customise your bundle with no expiry date! Ratio: Ksh 1 = 5 MB</p>
+            
+            <div class="mb-4">
+                <label class="block text-gray-300 mb-2">Enter Amount (Ksh)</label>
+                <input type="number" id="bundle-amount" class="w-full p-3 rounded-lg bg-gray-800 text-white" placeholder="e.g. 20" min="1">
+            </div>
+            
+            <div class="mb-4 p-4 bg-gray-800 rounded-lg">
+                <p class="text-gray-300">You will receive:</p>
+                <h3 id="bundle-result" class="text-2xl font-bold text-custom-orange">0 MB</h3>
+            </div>
+            
+            <button id="calculate-bundle" class="w-full bg-custom-orange text-white py-3 rounded-lg font-bold hover:bg-orange-600 transition">
+                Calculate Bundle
+            </button>
+            
+            <button id="purchase-custom-bundle" class="w-full bg-white text-custom-dark py-3 rounded-lg font-bold mt-3 hover:bg-gray-200 transition">
+                Purchase Now
+            </button>
+        </div>
+    </div>
+
+    <!-- Purchase Modal -->
+    <div id="purchase-modal" class="modal">
+        <div class="modal-content purchase-modal">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-custom-orange">Complete Your Purchase</h2>
+                <button class="close-purchase text-white text-2xl">&times;</button>
+            </div>
+            
+            <div class="mb-4 p-4 bg-gray-800 rounded-lg">
+                <p class="text-gray-300">You're purchasing:</p>
+                <h3 id="purchase-description" class="text-2xl font-bold text-custom-orange"></h3>
+                <p class="text-lg mt-2">Amount: <span id="purchase-amount" class="font-bold"></span></p>
+            </div>
+            
+            <p class="text-sm text-gray-300 mb-4">Send <span id="payment-amount" class="font-bold"></span> to the till number below and wait for confirmation</p>
+            
+            <div class="till-number">
+                4376286
+            </div>
+            
+            <button id="copy-till" class="copy-btn">
+                <i class="fas fa-copy mr-2"></i> Copy to Clipboard
+            </button>
+            
+            <p class="text-xs text-gray-400 mt-4">Your bundle will be activated automatically after payment confirmation</p>
+        </div>
+    </div>
+
+    <!-- Footer / Bottom Nav -->
+    <footer class="bottom-nav">
+        <div class="flex justify-around">
+            <div class="menu-item active">
+                <i class="fas fa-home block text-xl"></i>
+                <span class="text-xs">Home</span>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-wifi block text-xl"></i>
+                <span class="text-xs">Data</span>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-shopping-cart block text-xl"></i>
+                <span class="text-xs">Buy</span>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-gift block text-xl"></i>
+                <span class="text-xs">Offers</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Hamburger menu functionality
+        const hamburgerMenu = document.querySelector('.hamburger-menu');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        
+        hamburgerMenu.addEventListener('click', () => {
+            if (mobileMenu.style.width === '0px' || !mobileMenu.style.width) {
+                mobileMenu.style.width = '70%';
+            } else {
+                mobileMenu.style.width = '0';
+            }
+        });
+        
+        // Globe click to show pull-up menu
+        const globe = document.querySelector('.globe');
+        const pullupMenu = document.querySelector('.pullup-menu');
+        
+        globe.addEventListener('click', () => {
+            if (pullupMenu.style.display === 'block') {
+                pullupMenu.style.display = 'none';
+            } else {
+                pullupMenu.style.display = 'block';
+            }
+        });
+        
+        // Show bundles button
+        const showBundlesBtn = document.getElementById('show-bundles');
+        const bundlesContainer = document.getElementById('bundles-container');
+        
+        showBundlesBtn.addEventListener('click', () => {
+            if (bundlesContainer.classList.contains('hidden')) {
+                bundlesContainer.classList.remove('hidden');
+                showBundlesBtn.textContent = 'Hide Bundles';
+            } else {
+                bundlesContainer.classList.add('hidden');
+                showBundlesBtn.textContent = 'Show Available Bundles';
+            }
+        });
+        
+        // Jenga Bundle modal
+        const jengaBundleBtn = document.getElementById('jenga-bundle');
+        const jengaModal = document.getElementById('jenga-modal');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+        const calculateBundleBtn = document.getElementById('calculate-bundle');
+        const bundleAmountInput = document.getElementById('bundle-amount');
+        const bundleResult = document.getElementById('bundle-result');
+        const purchaseCustomBundleBtn = document.getElementById('purchase-custom-bundle');
+        
+        jengaBundleBtn.addEventListener('click', () => {
+            jengaModal.style.display = 'flex';
+        });
+        
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                jengaModal.style.display = 'none';
+            });
+        });
+        
+        calculateBundleBtn.addEventListener('click', () => {
+            const amount = parseInt(bundleAmountInput.value) || 0;
+            const dataMB = amount * 5;
+            bundleResult.textContent = `${dataMB.toLocaleString()} MB`;
+        });
+        
+        purchaseCustomBundleBtn.addEventListener('click', () => {
+            const amount = parseInt(bundleAmountInput.value) || 0;
+            if (amount > 0) {
+                const dataMB = amount * 5;
+                showPurchaseModal(amount, `${dataMB.toLocaleString()} MB (Custom Bundle)`);
+                jengaModal.style.display = 'none';
+            } else {
+                alert('Please enter a valid amount');
+            }
+        });
+        
+        // Bundle selection
+        const bundleCards = document.querySelectorAll('.bundle-card');
+        let selectedBundle = null;
+        
+        bundleCards.forEach(card => {
+            card.addEventListener('click', () => {
+                // Remove selected class from all cards
+                bundleCards.forEach(c => c.classList.remove('selected'));
+                
+                // Add selected class to clicked card
+                card.classList.add('selected');
+                
+                // Set selected bundle
+                selectedBundle = {
+                    amount: card.getAttribute('data-amount'),
+                    description: card.getAttribute('data-description')
+                };
+                
+                // Show purchase modal after a short delay
+                setTimeout(() => {
+                    showPurchaseModal(selectedBundle.amount, selectedBundle.description);
+                }, 300);
+            });
+        });
+        
+        // Purchase modal
+        const purchaseModal = document.getElementById('purchase-modal');
+        const closePurchaseBtn = document.querySelector('.close-purchase');
+        const purchaseDescription = document.getElementById('purchase-description');
+        const purchaseAmount = document.getElementById('purchase-amount');
+        const paymentAmount = document.getElementById('payment-amount');
+        const copyTillBtn = document.getElementById('copy-till');
+        
+        function showPurchaseModal(amount, description) {
+            purchaseDescription.textContent = description;
+            purchaseAmount.textContent = `Ksh ${amount}`;
+            paymentAmount.textContent = `Ksh ${amount}`;
+            purchaseModal.style.display = 'flex';
+        }
+        
+        closePurchaseBtn.addEventListener('click', () => {
+            purchaseModal.style.display = 'none';
+        });
+        
+        copyTillBtn.addEventListener('click', () => {
+            // Copy till number to clipboard
+            navigator.clipboard.writeText("4376286")
+                .then(() => {
+                    copyTillBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Copied!';
+                    copyTillBtn.style.background = '#4CAF50';
+                    
+                    // Reset button after 2 seconds
+                    setTimeout(() => {
+                        copyTillBtn.innerHTML = '<i class="fas fa-copy mr-2"></i> Copy to Clipboard';
+                        copyTillBtn.style.background = '#FF7F00';
+                    }, 2000);
+                })
+                .catch(err => {
+                    alert('Failed to copy: ' + err);
+                });
+        });
+        
+        // Close modals if clicked outside
+        window.addEventListener('click', (e) => {
+            if (e.target === jengaModal) {
+                jengaModal.style.display = 'none';
+            }
+            if (e.target === purchaseModal) {
+                purchaseModal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
