@@ -67,9 +67,11 @@
             text-align: center;
             padding: 12px 0;
             flex: 1;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
         
-        .menu-item.active {
+        .menu-item:hover, .menu-item.active {
             color: #FF7F00;
             border-top: 3px solid #FF7F00;
         }
@@ -256,6 +258,28 @@
         .overlay.active {
             display: block;
         }
+        
+        .plans-container {
+            display: none;
+        }
+        
+        .plans-container.active {
+            display: block;
+        }
+        
+        .tab-button {
+            padding: 10px 15px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 0 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button.active {
+            background: #FF7F00;
+            color: white;
+        }
     </style>
 </head>
 <body class="text-white">
@@ -294,15 +318,22 @@
             <p class="text-sm">First-time customers get DOUBLE the amount on any purchase!</p>
         </div>
 
+        <!-- Tabs for Data, Airtime, SMS -->
+        <div class="flex justify-center mb-8">
+            <div class="tab-button active" data-tab="data">Data</div>
+            <div class="tab-button" data-tab="airtime">Airtime</div>
+            <div class="tab-button" data-tab="sms">SMS</div>
+        </div>
+
         <!-- Call to Action Circle -->
-        <div class="cta-circle" id="show-bundles">
-            <i class="fas fa-wifi"></i>
-            <span>Data Bundles</span>
+        <div class="cta-circle" id="show-plans">
+            <i class="fas fa-wifi" id="cta-icon"></i>
+            <span id="cta-title">Data Bundles</span>
             <p class="text-sm mt-2">Tap to view offers</p>
         </div>
 
         <!-- Data Bundles -->
-        <div id="bundles-container" class="mt-12 hidden">
+        <div id="data-plans" class="plans-container active">
             <h2 class="text-2xl font-bold text-center mb-6">Data Bundles</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -374,6 +405,182 @@
                 </button>
             </div>
         </div>
+
+        <!-- Airtime Plans -->
+        <div id="airtime-plans" class="plans-container">
+            <h2 class="text-2xl font-bold text-center mb-6">Airtime Plans</h2>
+            <p class="text-center text-gray-300 mb-6">No expiry - Get exactly what you pay for</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bundle-card" data-amount="5" data-description="Ksh 5 Airtime">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">Ksh 5</h3>
+                            <p class="text-sm text-gray-300">No expiry</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 5</div>
+                    </div>
+                </div>
+                
+                <div class="bundle-card" data-amount="10" data-description="Ksh 10 Airtime">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">Ksh 10</h3>
+                            <p class="text-sm text-gray-300">No expiry</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 10</div>
+                    </div>
+                </div>
+                
+                <div class="bundle-card" data-amount="20" data-description="Ksh 20 Airtime">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">Ksh 20</h3>
+                            <p class="text-sm text-gray-300">No expiry</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 20</div>
+                    </div>
+                </div>
+                
+                <div class="bundle-card" data-amount="50" data-description="Ksh 50 Airtime">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">Ksh 50</h3>
+                            <p class="text-sm text-gray-300">No expiry</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 50</div>
+                    </div>
+                </div>
+                
+                <div class="bundle-card" data-amount="70" data-description="Ksh 70 Airtime">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">Ksh 70</h3>
+                            <p class="text-sm text-gray-300">No expiry</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 70</div>
+                    </div>
+                </div>
+                
+                <div class="bundle-card" data-amount="100" data-description="Ksh 100 Airtime">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">Ksh 100</h3>
+                            <p class="text-sm text-gray-300">No expiry</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 100</div>
+                    </div>
+                </div>
+
+                <div class="bundle-card" data-amount="200" data-description="Ksh 200 Airtime">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">Ksh 200</h3>
+                            <p class="text-sm text-gray-300">No expiry</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 200</div>
+                    </div>
+                </div>
+
+                <div class="bundle-card" data-amount="500" data-description="Ksh 500 Airtime">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">Ksh 500</h3>
+                            <p class="text-sm text-gray-300">No expiry</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 500</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SMS Plans -->
+        <div id="sms-plans" class="plans-container">
+            <h2 class="text-2xl font-bold text-center mb-6">SMS Plans</h2>
+            <p class="text-center text-gray-300 mb-6">No expiry - 5 SMS for every Ksh 1</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bundle-card" data-amount="5" data-description="25 SMS">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">25 SMS</h3>
+                            <p class="text-sm text-gray-300">No expiry</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 5</div>
+                    </div>
+                </div>
+                
+                <div class="bundle-card" data-amount="10" data-description="50 SMS">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">50 SMS</h3>
+                            <p class="text-sm text-gray-300">No expiry</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 10</div>
+                    </div>
+                </div>
+                
+                <div class="bundle-card" data-amount="20" data-description="100 SMS">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">100 SMS</h3>
+                            <p class="text-sm text-gray-300">No expiry</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 20</div>
+                    </div>
+                </div>
+                
+                <div class="bundle-card" data-amount="50" data-description="250 SMS">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">250 SMS</h3>
+                            <p class="text-sm text-gray-300">No expiry</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 50</div>
+                    </div>
+                </div>
+                
+                <div class="bundle-card" data-amount="70" data-description="350 SMS">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">350 SMS</h3>
+                            <p class="text-sm text-gray-300">No expiry</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 70</div>
+                    </div>
+                </div>
+                
+                <div class="bundle-card" data-amount="100" data-description="500 SMS">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">500 SMS</h3>
+                            <p class="text-sm text-gray-300">No expiry</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 100</div>
+                    </div>
+                </div>
+
+                <div class="bundle-card" data-amount="200" data-description="1000 SMS">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">1000 SMS</h3>
+                            <p class="text-sm text-gray-300">No expiry</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 200</div>
+                    </div>
+                </div>
+
+                <div class="bundle-card" data-amount="500" data-description="2500 SMS">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold">2500 SMS</h3>
+                            <p class="text-sm text-gray-300">No expiry</p>
+                        </div>
+                        <div class="text-custom-orange font-bold">Ksh 500</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- Jenga Bundle Modal -->
@@ -437,21 +644,21 @@
     <!-- Footer / Bottom Nav -->
     <footer class="bottom-nav">
         <div class="flex justify-around">
-            <div class="menu-item active">
+            <div class="menu-item active" data-tab="data">
                 <i class="fas fa-home block text-xl"></i>
                 <span class="text-xs">Home</span>
             </div>
-            <div class="menu-item">
+            <div class="menu-item" data-tab="data">
                 <i class="fas fa-wifi block text-xl"></i>
                 <span class="text-xs">Data</span>
             </div>
-            <div class="menu-item">
-                <i class="fas fa-shopping-cart block text-xl"></i>
-                <span class="text-xs">Buy</span>
+            <div class="menu-item" data-tab="airtime">
+                <i class="fas fa-phone-alt block text-xl"></i>
+                <span class="text-xs">Airtime</span>
             </div>
-            <div class="menu-item">
-                <i class="fas fa-gift block text-xl"></i>
-                <span class="text-xs">Offers</span>
+            <div class="menu-item" data-tab="sms">
+                <i class="fas fa-sms block text-xl"></i>
+                <span class="text-xs">SMS</span>
             </div>
         </div>
     </footer>
@@ -472,19 +679,83 @@
             overlay.classList.remove('active');
         });
         
-        // Show bundles button
-        const showBundlesBtn = document.getElementById('show-bundles');
-        const bundlesContainer = document.getElementById('bundles-container');
+        // Tab functionality
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const plansContainers = document.querySelectorAll('.plans-container');
+        const ctaIcon = document.getElementById('cta-icon');
+        const ctaTitle = document.getElementById('cta-title');
+        const footerItems = document.querySelectorAll('.menu-item');
         
-        showBundlesBtn.addEventListener('click', () => {
-            if (bundlesContainer.classList.contains('hidden')) {
-                bundlesContainer.classList.remove('hidden');
-                showBundlesBtn.querySelector('span').textContent = 'Hide Bundles';
-                showBundlesBtn.querySelector('p').textContent = 'Tap to hide offers';
+        function switchTab(tabName) {
+            // Update tab buttons
+            tabButtons.forEach(button => {
+                if (button.getAttribute('data-tab') === tabName) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+            
+            // Update plans containers
+            plansContainers.forEach(container => {
+                if (container.id === `${tabName}-plans`) {
+                    container.classList.add('active');
+                } else {
+                    container.classList.remove('active');
+                }
+            });
+            
+            // Update CTA circle
+            if (tabName === 'data') {
+                ctaIcon.className = 'fas fa-wifi';
+                ctaTitle.textContent = 'Data Bundles';
+            } else if (tabName === 'airtime') {
+                ctaIcon.className = 'fas fa-phone-alt';
+                ctaTitle.textContent = 'Airtime';
+            } else if (tabName === 'sms') {
+                ctaIcon.className = 'fas fa-sms';
+                ctaTitle.textContent = 'SMS Plans';
+            }
+            
+            // Update footer items
+            footerItems.forEach(item => {
+                if (item.getAttribute('data-tab') === tabName) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabName = button.getAttribute('data-tab');
+                switchTab(tabName);
+            });
+        });
+        
+        footerItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const tabName = item.getAttribute('data-tab');
+                switchTab(tabName);
+            });
+        });
+        
+        // Show plans button
+        const showPlansBtn = document.getElementById('show-plans');
+        
+        showPlansBtn.addEventListener('click', () => {
+            const activeTab = document.querySelector('.tab-button.active').getAttribute('data-tab');
+            const plansContainer = document.getElementById(`${activeTab}-plans`);
+            
+            if (plansContainer.classList.contains('active')) {
+                plansContainer.classList.remove('active');
+                showPlansBtn.querySelector('span').textContent = `${ctaTitle.textContent}`;
+                showPlansBtn.querySelector('p').textContent = 'Tap to view offers';
             } else {
-                bundlesContainer.classList.add('hidden');
-                showBundlesBtn.querySelector('span').textContent = 'Data Bundles';
-                showBundlesBtn.querySelector('p').textContent = 'Tap to view offers';
+                plansContainer.classList.add('active');
+                showPlansBtn.querySelector('span').textContent = 'Hide Offers';
+                showPlansBtn.querySelector('p').textContent = 'Tap to hide offers';
             }
         });
         
